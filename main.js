@@ -13,6 +13,9 @@ favoritesBtn.addEventListener('click', event => {
 fotoCardSection.addEventListener('click', event => {
     favoriteVote(event);
   });
+fotoCardSection.addEventListener('click', event =>{
+    deleteCard(event)
+  });
 window.addEventListener('load', createCardsOnReload);
 
 
@@ -63,6 +66,16 @@ function createNewFoto(event) {
   createCards(foto);
 }
 
+function deleteCard(event) {
+  var index = findIndexNumber(event.target.parentElement.parentElement.dataset.id);
+  var card = event.target.parentElement.parentElement;
+  console.log(card);
+  if (event.target.classList.contains('delete-btn')) {
+    fotoArray[index].deleteFromStorage(fotoArray, index);
+    card.remove();
+  }
+}
+
 function favoriteArrayCreate() {
   var favoriteArray = fotoArray.filter(function(foto) {
     if(foto.favorite === true){
@@ -73,9 +86,7 @@ function favoriteArrayCreate() {
 }
 
 function favoriteCountUpdate() {
-  // not working on reload for some reason
   var favoriteArray = favoriteArrayCreate();
-  console.log(favoriteArray);
   document.querySelector('.favorite-number').innerText = favoriteArray.length;
 }
 
