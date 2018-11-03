@@ -9,32 +9,31 @@
 <body>
   <header>
     <h1>FOTO<img class="logo-svg" alt="foto finder logo" src="images/foto-finder-logo.svg">FINDER</h1>
-    <form>
-      <input class ="search" type="text" name="search" placeholder="Search">
-    </form>
+    <input class ="search" type="text" name="search" placeholder="Search">
   </header>
   <section class="user-inputs">
-    <form>
+    <form class="user-inputs-form">
       <label for="title">Title</label>
       <input type="text" name="title">
       <label for="caption">Caption</label>
       <input type="text" name="caption">
-      <input type="file" name="fotoUpload">
-      <div>
-        <button>View <span>#</span> Favorites</button>
-        <button>Add to Album</button>
+      <label id="foto-upload-label" for="fotoUpload">Choose a File</label>
+      <input id="foto-upload-input" type="file" name="fotoUpload">
+      <div class="add-filter-btns-div">
+        <button class="add-filter-btns">View <span>#</span> Favorites</button>
+        <button class="add-filter-btns">Add to Album</button>
       </div>
     </form>
   </section>
   <section>
 
     <article>
-      <head>${foto.title}</head>
-      <img src="${foto.foto}">
+      <h2>${foto.title}</h2>
+      <div class="foto"></div>
       <p>${foto.caption}</p>
       <footer>
-        <button>DELETESVG</button>
-        <button>FAVORITESVG</button>
+        <button class="delete-btn"></button>
+        <button class="favorite-btn"></button>
       </footer>
     </article>
   
