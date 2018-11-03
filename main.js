@@ -51,6 +51,7 @@ function createCardsOnReload() {
     })
     fotoArray.reverse();
   } 
+  favoriteCountUpdate();
 }
 
 function createNewFoto(event) {
@@ -62,15 +63,27 @@ function createNewFoto(event) {
   createCards(foto);
 }
 
-function favoriteFilter(event) {
-  event.preventDefault();
+function favoriteArrayCreate() {
   var favoriteArray = fotoArray.filter(function(foto) {
     if(foto.favorite === true){
       return foto;
     };    
   });
-  removeCards();
+  return favoriteArray;
+}
+
+function favoriteCountUpdate() {
+  // not working on reload for some reason
+  var favoriteArray = favoriteArrayCreate();
+  console.log(favoriteArray);
+  document.querySelector('.favorite-number').innerText = favoriteArray.length;
+}
+
+function favoriteFilter(event) {
+  event.preventDefault();
+  var favoriteArray = favoriteArrayCreate();
   favoriteArray.reverse();
+  removeCards();
   favoriteArray.forEach(function(foto) {
     createCards(foto);
   });
@@ -87,9 +100,11 @@ function favoriteVote(event) {
   if (event.target.classList.contains('favorite-btn') && event.target.classList.contains('favorite')) {
     favoriteUpdateCall(index);
     event.target.classList.remove('favorite');
+    favoriteCountUpdate();
   } else if (event.target.classList.contains('favorite-btn')) {
     favoriteUpdateCall(index);
     event.target.classList.add('favorite')
+    favoriteCountUpdate();
   };
 }
 
@@ -100,7 +115,7 @@ function findIndexNumber(fotoId) {
       return i;
     };
   }
-};
+}
 
 function removeCards() {
   var cards = document.querySelectorAll('.foto-card');
