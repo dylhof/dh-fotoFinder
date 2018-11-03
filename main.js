@@ -7,10 +7,12 @@ var caption = document.querySelector('.caption');
 var fotoCardSection = document.querySelector('.foto-card-section')
 
 addToAblumBtn.addEventListener('click', createNewFoto);
-favoritesBtn.addEventListener('click', favoriteFilter);
-fotoCardSection.addEventListener('click', function(event) {
-  favoriteVote(event);
-});
+favoritesBtn.addEventListener('click', event => {
+    favoriteFilter(event)
+  });
+fotoCardSection.addEventListener('click', event => {
+    favoriteVote(event);
+  });
 window.addEventListener('load', createCardsOnReload);
 
 
@@ -21,7 +23,7 @@ function clearInputs() {
 
 function createCards(foto) {
   fotoCardSection.insertAdjacentHTML('afterbegin', 
-    `<article data-id=${foto.id}>
+    `<article class="foto-card" data-id=${foto.id}>
       <h2>${foto.title}</h2>
       <div class="foto" style="background-image: url(${foto.file}); background-size: contain; background-repeat: no-repeat;"></div>
       <p>${foto.caption}</p>
@@ -49,6 +51,7 @@ function createCardsOnReload() {
     })
     fotoArray.reverse();
   } 
+  favoriteCountUpdate();
 }
 
 function createNewFoto(event) {
@@ -60,10 +63,30 @@ function createNewFoto(event) {
   createCards(foto);
 }
 
-funtion favoriteFilter() {
-  var favoriteArray = fotoArray.map(function(foto){
-    foto.favorite;
-  })
+function favoriteArrayCreate() {
+  var favoriteArray = fotoArray.filter(function(foto) {
+    if(foto.favorite === true){
+      return foto;
+    };    
+  });
+  return favoriteArray;
+}
+
+function favoriteCountUpdate() {
+  // not working on reload for some reason
+  var favoriteArray = favoriteArrayCreate();
+  console.log(favoriteArray);
+  document.querySelector('.favorite-number').innerText = favoriteArray.length;
+}
+
+function favoriteFilter(event) {
+  event.preventDefault();
+  var favoriteArray = favoriteArrayCreate();
+  favoriteArray.reverse();
+  removeCards();
+  favoriteArray.forEach(function(foto) {
+    createCards(foto);
+  });
 }
 
 function favoriteUpdateCall(index){
@@ -77,9 +100,11 @@ function favoriteVote(event) {
   if (event.target.classList.contains('favorite-btn') && event.target.classList.contains('favorite')) {
     favoriteUpdateCall(index);
     event.target.classList.remove('favorite');
+    favoriteCountUpdate();
   } else if (event.target.classList.contains('favorite-btn')) {
     favoriteUpdateCall(index);
     event.target.classList.add('favorite')
+    favoriteCountUpdate();
   };
 }
 
@@ -90,9 +115,14 @@ function findIndexNumber(fotoId) {
       return i;
     };
   }
-};
+}
 
-
+function removeCards() {
+  var cards = document.querySelectorAll('.foto-card');
+  cards.forEach(function(card){
+    card.remove();
+  });
+}
 
 
 
