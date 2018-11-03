@@ -24,7 +24,10 @@ h1 {
 
 .search {
   margin: 20px;
-  height: 35px;
+  height: 20px;
+  border: 2px solid #c2b2b4;
+  border-radius: 5px;
+  font-size: 20px;
 }
 
 .user-inputs {
@@ -32,7 +35,117 @@ h1 {
   color: #c2b2b4;
 }
 
-form {
+.user-inputs-form {
   display: flex;
   flex-direction: column;
+  width: 30%;
+  font-size: 14px;
+  margin: auto;
+  padding-bottom: 20px;
 }
+
+label,
+input {
+  height: 20px;
+  padding: 10px;
+}
+
+#foto-upload-input{
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+#foto-upload-label {
+  height: 20px;
+}
+
+.add-filter-btns,
+#foto-upload-label{
+  background-color: #5B4447;
+  border: 0;
+  margin: 20px 0px 20px 0px;
+  color: #FFF;
+}
+
+.add-filter-btns {
+  height: 35px;
+  width: 45%;
+}
+
+.add-filter-btns-div {
+  display: flex;
+  justify-content: space-between;
+}
+
+article {
+ /* height: 300px;*/
+  width: 200px;
+  border: 2px solid #938284;
+  margin: 20px;
+}
+
+h2,
+p {
+  color: #3E2A35;
+  font-size: 18px;
+  margin: 10px;
+}
+
+p {
+  height: 100px;
+}
+
+.foto{
+  padding: 50px 100px;
+}
+
+footer {
+  align-items: center;
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  bottom: 0px;
+  background-color: #5B4447;
+}
+
+.delete-btn {
+  background-image: url(images/delete.svg);
+
+}
+
+.favorite-btn {
+  background-image: url(images/favorite.svg);
+}
+
+.delete-btn:hover {
+  background-image: url(images/delete-active.svg);
+}
+
+.favorite-btn:hover {
+  background-image: url(images/favorite-active.svg);
+}
+
+.delete-btn,
+.favorite-btn{
+  background-repeat: no-repeat;
+  height: 30px;
+  width: 35px;
+  background-size: 30px;
+  border: 0;
+  background-color: #5B4447;
+  margin: 10px 5px;
+}
+
+
+
+
+
+
+
+
+
