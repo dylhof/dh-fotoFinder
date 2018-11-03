@@ -16,6 +16,9 @@ fotoCardSection.addEventListener('click', event => {
 fotoCardSection.addEventListener('click', event =>{
     deleteCard(event)
   });
+fotoCardSection.addEventListener('dblclick', event => {
+  updateFotoCard(event);
+  });
 window.addEventListener('load', createCardsOnReload);
 
 
@@ -27,9 +30,9 @@ function clearInputs() {
 function createCards(foto) {
   fotoCardSection.insertAdjacentHTML('afterbegin', 
     `<article class="foto-card" data-id=${foto.id}>
-      <h2>${foto.title}</h2>
+      <h2 contenteditable='false' class='title'>${foto.title}</h2>
       <div class="foto" style="background-image: url(${foto.file}); background-size: contain; background-repeat: no-repeat;"></div>
-      <p>${foto.caption}</p>
+      <p contenteditable='false' class='caption'>${foto.caption}</p>
       <footer>
         <button class="delete-btn"></button>
         <button class="favorite-btn"></button>
@@ -69,11 +72,16 @@ function createNewFoto(event) {
 function deleteCard(event) {
   var index = findIndexNumber(event.target.parentElement.parentElement.dataset.id);
   var card = event.target.parentElement.parentElement;
-  console.log(card);
+  // console.log(card);
   if (event.target.classList.contains('delete-btn')) {
     fotoArray[index].deleteFromStorage(fotoArray, index);
     card.remove();
   }
+  favoriteCountUpdate();
+}
+
+function editText() {
+  event.target.contentEditable = true;
 }
 
 function favoriteArrayCreate() {
@@ -87,17 +95,35 @@ function favoriteArrayCreate() {
 
 function favoriteCountUpdate() {
   var favoriteArray = favoriteArrayCreate();
-  document.querySelector('.favorite-number').innerText = favoriteArray.length;
+  if (favoriteArray.length === 0){
+    document.querySelector('.favorite-number').innerText = 0;
+  } else {
+    document.querySelector('.favorite-number').innerText = favoriteArray.length;
+  }
 }
+  
 
 function favoriteFilter(event) {
   event.preventDefault();
-  var favoriteArray = favoriteArrayCreate();
-  favoriteArray.reverse();
-  removeCards();
-  favoriteArray.forEach(function(foto) {
-    createCards(foto);
-  });
+  if(document.querySelector('.fav-btn').innerText === 'View All') {
+    removeCards();
+    fotoArray.reverse();
+    fotoArray.forEach(function(foto) {
+      createCards(foto);
+    });
+    fotoArray.reverse();
+    document.querySelector('.fav-btn').innerHTML = 'View <span class="favorite-number">#</span> Favorites';
+    favoriteCountUpdate();
+  } else {
+    var favoriteArray = favoriteArrayCreate();
+    removeCards();
+    favoriteArray.reverse();
+    favoriteArray.forEach(function(foto) {
+      createCards(foto);
+    });
+    favoriteArray.reverse();
+    document.querySelector('.fav-btn').innerText = 'View All';
+  };
 }
 
 function favoriteUpdateCall(index){
@@ -114,7 +140,7 @@ function favoriteVote(event) {
     favoriteCountUpdate();
   } else if (event.target.classList.contains('favorite-btn')) {
     favoriteUpdateCall(index);
-    event.target.classList.add('favorite')
+    event.target.classList.add('favorite');
     favoriteCountUpdate();
   };
 }
@@ -134,9 +160,6 @@ function removeCards() {
     card.remove();
   });
 }
-
-
-
 
 
 
