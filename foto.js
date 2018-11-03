@@ -20,8 +20,9 @@ class Foto {
     localStorage.setItem("array", fotoArrayString);
   }
 
-  updateFavorite() {
+  updateFavorite(foto) {
     this.favorite = !this.favorite;
+    
   }
 
   updateFoto() {
