@@ -45,7 +45,8 @@ h1 {
 }
 
 label,
-input {
+input,
+textarea {
   height: 20px;
   padding: 10px;
 }
@@ -141,7 +142,10 @@ footer {
   margin: 10px 5px;
 }
 
-
+.foto-card-section {
+  display: flex;
+  flex-wrap: wrap;
+}
 
 
 
