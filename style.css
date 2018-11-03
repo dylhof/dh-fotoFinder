@@ -1,3 +1,6 @@
+*:focus{
+  outline: none;
+}
 body {
   box-sizing: border-box;
   font-family: 'Open Sans', sans-serif;
@@ -128,6 +131,14 @@ footer {
 }
 
 .favorite-btn:hover {
+  background-image: url(images/favorite-active.svg);
+}
+/*
+.favorite-btn:focus {
+  outline: none;
+}*/
+
+.favorite{
   background-image: url(images/favorite-active.svg);
 }
 
