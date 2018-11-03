@@ -12,9 +12,8 @@ class Foto {
     localStorage.setItem("array", fotoArrayString);
   }
 
-  deleteFromStorage(arr, id) {
+  deleteFromStorage(arr, index) {
     localStorage.removeItem("array");
-    var index = getIndexById(id);
     arr.splice(arr[index], 1);
     var fotoArrayString = JSON.stringify(arr);
     localStorage.setItem("array", fotoArrayString);
