@@ -97,15 +97,28 @@ p {
   color: #3E2A35;
   font-size: 18px;
   margin: 10px;
+  padding: 10px;
+  word-break: break-all;
 }
 
 p {
   height: 100px;
 }
 
-.foto{
-  padding: 50px 100px;
+h2:focus,
+p:focus {
+  /*color: ;*/
+  border: 2px solid #938284;
 }
+
+.foto{
+  /*padding: 50px 100px;*/
+  height: 100px;
+  width: 200px;
+  object-fit: cover;
+}
+
+
 
 footer {
   align-items: center;

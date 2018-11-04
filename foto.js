@@ -24,7 +24,7 @@ class Foto {
     
   }
 
-  updateFoto() {
-
+  updateSelf(newText, type) {
+    this[type] = newText;
   }
 }

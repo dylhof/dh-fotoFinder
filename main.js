@@ -16,9 +16,7 @@ fotoCardSection.addEventListener('click', event => {
 fotoCardSection.addEventListener('click', event =>{
     deleteCard(event)
   });
-fotoCardSection.addEventListener('dblclick', event => {
-  updateFotoCard(event);
-  });
+fotoCardSection.addEventListener('dblclick', updateFotoCard);
 window.addEventListener('load', createCardsOnReload);
 
 
@@ -30,9 +28,9 @@ function clearInputs() {
 function createCards(foto) {
   fotoCardSection.insertAdjacentHTML('afterbegin', 
     `<article class="foto-card" data-id=${foto.id}>
-      <h2 contenteditable='false' class='title'>${foto.title}</h2>
-      <div class="foto" style="background-image: url(${foto.file}); background-size: contain; background-repeat: no-repeat;"></div>
-      <p contenteditable='false' class='caption'>${foto.caption}</p>
+      <h2  class="text title" contenteditable="false">${foto.title}</h2>
+      <img class="foto" src="${foto.file}">
+      <p  class="text caption" contenteditable="false">${foto.caption}</p>
       <footer>
         <button class="delete-btn"></button>
         <button class="favorite-btn"></button>
@@ -72,7 +70,6 @@ function createNewFoto(event) {
 function deleteCard(event) {
   var index = findIndexNumber(event.target.parentElement.parentElement.dataset.id);
   var card = event.target.parentElement.parentElement;
-  // console.log(card);
   if (event.target.classList.contains('delete-btn')) {
     fotoArray[index].deleteFromStorage(fotoArray, index);
     card.remove();
@@ -80,9 +77,7 @@ function deleteCard(event) {
   favoriteCountUpdate();
 }
 
-function editText() {
-  event.target.contentEditable = true;
-}
+
 
 function favoriteArrayCreate() {
   var favoriteArray = fotoArray.filter(function(foto) {
@@ -161,6 +156,50 @@ function removeCards() {
   });
 }
 
+function updateFoto() {
+var index = findIndexNumber(event.target.parentElement.dataset.id);
+console.log(index);
+  if (event.target.classList.contains('title')) {
+    fotoArray[index].updateSelf(event.target.innerText, 'title');
+  } else {
+    fotoArray[index].updateSelf(event.target.innerText, 'caption');
+  }
+  fotoArray[index].saveToStorage(fotoArray);
+}
+
+
+function updateFotoCard(event) {
+ if (event.target.classList.contains('text')) {
+  setEditable();
+  document.body.addEventListener('keypress', saveTextOnEnter);
+  event.target.addEventListener('blur', saveTextOnClick);
+ }
+}
+
+
+function saveTextOnClick(event) {
+  updateFoto();    
+  setUneditable(); 
+  document.body.removeEventListener('keypress', saveTextOnEnter);
+  event.target.removeEventListener('blur', saveTextOnClick);
+};
+
+function saveTextOnEnter(event) {
+  if (event.code === 'Enter') {
+    updateFoto();    
+    setUneditable(); 
+    document.body.removeEventListener('keypress', saveTextOnEnter);
+    event.target.removeEventListener('blur', saveTextOnClick);
+  }
+}; 
+
+function setUneditable() {
+  event.target.contentEditable = false;
+};
+
+function setEditable() {
+  event.target.contentEditable = true;
+}
 
 
 
