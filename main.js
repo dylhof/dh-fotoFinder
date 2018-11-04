@@ -1,12 +1,14 @@
 var fotoArray = [];
-var addToAblumBtn = document.querySelector('.add-btn');
+var addToAlbumBtn = document.querySelector('.add-btn');
 var favoritesBtn = document.querySelector('.fav-btn');
 var uploadBtn = document.querySelector('#foto-upload-input');
 var title = document.querySelector('.title');
 var caption = document.querySelector('.caption');
-var fotoCardSection = document.querySelector('.foto-card-section')
+var fotoCardSection = document.querySelector('.foto-card-section');
+var userInputForm = document.querySelector('.user-inputs-form');
+var fotoInput = document.getElementById('foto-upload-input');
 
-addToAblumBtn.addEventListener('click', createNewFoto);
+addToAlbumBtn.addEventListener('click', createNewFoto);
 favoritesBtn.addEventListener('click', event => {
     favoriteFilter(event)
   });
@@ -17,8 +19,18 @@ fotoCardSection.addEventListener('click', event =>{
     deleteCard(event)
   });
 fotoCardSection.addEventListener('dblclick', updateFotoCard);
+userInputForm.addEventListener('input', enableButton)
 window.addEventListener('load', createCardsOnReload);
 
+function enableButton() {
+  if (title.value !== '' && caption.value !== '' && fotoInput.value !== '') {
+    addToAlbumBtn.disabled = false;
+  };
+}
+
+function disableButton() {
+    addToAlbumBtn.disabled = true;
+}
 
 function clearInputs() {
   title.value = '';
@@ -60,6 +72,7 @@ function createCardsOnReload() {
 
 function createNewFoto(event) {
   event.preventDefault();
+  disableButton();
   var userFoto = URL.createObjectURL(document.getElementById('foto-upload-input').files[0]);
   var foto = new Foto(title.value, caption.value, userFoto);
   fotoArray.unshift(foto);
@@ -76,8 +89,6 @@ function deleteCard(event) {
   }
   favoriteCountUpdate();
 }
-
-
 
 function favoriteArrayCreate() {
   var favoriteArray = fotoArray.filter(function(foto) {
