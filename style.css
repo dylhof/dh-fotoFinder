@@ -104,8 +104,17 @@ p {
 }
 
 .foto{
-  padding: 50px 100px;
+  /*padding: 50px 100px;*/
+  height: 100px;
+  width: 200px;
+  object-fit: cover;
 }
+
+/*card-img {
+ object-fit: cover;
+ width: 100%;
+ height:100%; //optional
+}*/
 
 footer {
   align-items: center;
