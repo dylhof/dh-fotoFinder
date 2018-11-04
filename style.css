@@ -41,7 +41,7 @@ h1 {
 .user-inputs-form {
   display: flex;
   flex-direction: column;
-  width: 30%;
+  width: 500px;
   font-size: 14px;
   margin: auto;
   padding-bottom: 20px;
@@ -87,6 +87,14 @@ textarea {
 
 .add-btn:disabled {
   background-color: #c2b2b4;
+}
+
+.no-photo-text {
+  color: #5b4447;
+  text-align: center;
+  width: 100%;
+  font-size: 30px;
+  word-break: normal;
 }
 
 article {

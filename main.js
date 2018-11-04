@@ -73,6 +73,7 @@ function createCardsOnReload() {
 function createNewFoto(event) {
   event.preventDefault();
   disableButton();
+  document.querySelector('.no-photo-text').remove();
   var userFoto = URL.createObjectURL(document.getElementById('foto-upload-input').files[0]);
   var foto = new Foto(title.value, caption.value, userFoto);
   fotoArray.unshift(foto);
@@ -88,6 +89,10 @@ function deleteCard(event) {
     card.remove();
   }
   favoriteCountUpdate();
+  if (fotoArray.length === 0) {
+    fotoCardSection.insertAdjacentHTML('afterbegin',
+      '<p class="no-photo-text">Looks like you don\'t have any photos yet! Add them above to start your album!</p>');
+  }
 }
 
 function favoriteArrayCreate() {
