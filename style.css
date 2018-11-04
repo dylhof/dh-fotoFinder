@@ -85,6 +85,10 @@ textarea {
   justify-content: space-between;
 }
 
+.add-btn:disabled {
+  background-color: #c2b2b4;
+}
+
 article {
  /* height: 300px;*/
   width: 200px;
