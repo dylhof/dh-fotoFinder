@@ -97,10 +97,18 @@ p {
   color: #3E2A35;
   font-size: 18px;
   margin: 10px;
+  padding: 10px;
+  word-break: break-all;
 }
 
 p {
   height: 100px;
+}
+
+h2:focus,
+p:focus {
+  /*color: ;*/
+  border: 2px solid #938284;
 }
 
 .foto{
@@ -110,11 +118,7 @@ p {
   object-fit: cover;
 }
 
-/*card-img {
- object-fit: cover;
- width: 100%;
- height:100%; //optional
-}*/
+
 
 footer {
   align-items: center;
