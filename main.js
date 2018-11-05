@@ -7,8 +7,11 @@ var caption = document.querySelector('.caption');
 var fotoCardSection = document.querySelector('.foto-card-section');
 var userInputForm = document.querySelector('.user-inputs-form');
 var fotoInput = document.getElementById('foto-upload-input');
+var userFoto = document.getElementById('foto-upload-input');
+var showMoreBtn = document.querySelector('.show-more-btn');
+var reader = new FileReader();
 
-addToAlbumBtn.addEventListener('click', createNewFoto);
+addToAlbumBtn.addEventListener('click', createFotoString);
 favoritesBtn.addEventListener('click', event => {
     favoriteFilter(event)
   });
@@ -19,30 +22,32 @@ fotoCardSection.addEventListener('click', event =>{
     deleteCard(event)
   });
 fotoCardSection.addEventListener('dblclick', updateFotoCard);
-userInputForm.addEventListener('input', enableButton)
+userInputForm.addEventListener('input', function() {
+  if (title.value !== '' && caption.value !== '' && fotoInput.value !== '')
+    enableButton(addToAlbumBtn);
+  });
 window.addEventListener('load', createCardsOnReload);
+document.querySelector('.search-input').addEventListener('keyup', liveSearch);
+showMoreBtn.addEventListener('click', showAll)
 
-function enableButton() {
-  if (title.value !== '' && caption.value !== '' && fotoInput.value !== '') {
-    addToAlbumBtn.disabled = false;
-  };
-}
 
-function disableButton() {
-    addToAlbumBtn.disabled = true;
+
+function disableButton(button) {
+    button.disabled = true;
 }
 
 function clearInputs() {
   title.value = '';
   caption.value = '';
+  userFoto.value = '';
 }
 
 function createCards(foto) {
   fotoCardSection.insertAdjacentHTML('afterbegin', 
     `<article class="foto-card" data-id=${foto.id}>
-      <h2  class="text title" contenteditable="false">${foto.title}</h2>
+      <h2  class="text searchable title" contenteditable="false">${foto.title}</h2>
       <img class="foto" src="${foto.file}">
-      <p  class="text caption" contenteditable="false">${foto.caption}</p>
+      <p  class="text searchable caption" contenteditable="false">${foto.caption}</p>
       <footer>
         <button class="delete-btn"></button>
         <button class="favorite-btn"></button>
@@ -59,26 +64,34 @@ function createCardsOnReload() {
     var storedArray = localStorage.getItem("array");
     var parsedArray = JSON.parse(storedArray);
     fotoArray = [];
-    parsedArray.reverse()
     parsedArray.forEach(function(foto){
-      createCards(foto);
       var foto = new Foto(foto.title, foto.caption, foto.file, foto.favorite, foto.id);
       fotoArray.push(foto);
-    })
-    fotoArray.reverse();
+      showTen(foto);
+    }) 
+    document.querySelector('.no-photo-text').remove();
   } 
   favoriteCountUpdate();
 }
 
+function createFotoString() {
+  if (document.getElementById('foto-upload-input').files[0]) {
+    reader.readAsDataURL(document.getElementById('foto-upload-input').files[0]);
+    reader.onload = createNewFoto;
+  }
+}
+
 function createNewFoto(event) {
   event.preventDefault();
-  disableButton();
-  document.querySelector('.no-photo-text').remove();
-  var userFoto = URL.createObjectURL(document.getElementById('foto-upload-input').files[0]);
+  disableButton(addToAlbumBtn);
+  var userFoto =  reader.result;
   var foto = new Foto(title.value, caption.value, userFoto);
-  fotoArray.unshift(foto);
+  fotoArray.push(foto);
   foto.saveToStorage(fotoArray);
-  createCards(foto);
+  showTen(foto);
+  if (fotoArray.length === 1) { 
+    document.querySelector('.no-photo-text').remove();
+  } 
 }
 
 function deleteCard(event) {
@@ -93,6 +106,13 @@ function deleteCard(event) {
     fotoCardSection.insertAdjacentHTML('afterbegin',
       '<p class="no-photo-text">Looks like you don\'t have any photos yet! Add them above to start your album!</p>');
   }
+  if (fotoArray.length <=10) {
+    disableButton(showMoreBtn);
+  }
+}
+
+function enableButton(button) {
+    button.disabled = false;
 }
 
 function favoriteArrayCreate() {
@@ -101,6 +121,7 @@ function favoriteArrayCreate() {
       return foto;
     };    
   });
+  favoriteArray.reverse();
   return favoriteArray;
 }
 
@@ -115,14 +136,14 @@ function favoriteCountUpdate() {
   
 
 function favoriteFilter(event) {
+  var changeArray = fotoArray.slice(0);
   event.preventDefault();
   if(document.querySelector('.fav-btn').innerText === 'View All') {
     removeCards();
-    fotoArray.reverse();
-    fotoArray.forEach(function(foto) {
-      createCards(foto);
+    // changeArray.reverse();
+    changeArray.forEach(function(foto) {
+      showTen(foto);
     });
-    fotoArray.reverse();
     document.querySelector('.fav-btn').innerHTML = 'View <span class="favorite-number">#</span> Favorites';
     favoriteCountUpdate();
   } else {
@@ -156,7 +177,6 @@ function favoriteVote(event) {
   };
 }
 
-
 function findIndexNumber(fotoId) {
  for (var i = 0; i < fotoArray.length; i++) {
     if (fotoArray[i].id === fotoId) {
@@ -165,33 +185,23 @@ function findIndexNumber(fotoId) {
   }
 }
 
+function liveSearch() {
+  var searchInput = this.value.toLowerCase();
+  var shownArray = fotoArray.filter(function(foto) {
+   return foto.title.toLowerCase().includes(searchInput) || foto.caption.toLowerCase().includes(searchInput)
+  })
+  removeCards();
+  shownArray.forEach(function(foto) {
+    createCards(foto);
+  })
+}
+
 function removeCards() {
   var cards = document.querySelectorAll('.foto-card');
   cards.forEach(function(card){
     card.remove();
   });
 }
-
-function updateFoto() {
-var index = findIndexNumber(event.target.parentElement.dataset.id);
-console.log(index);
-  if (event.target.classList.contains('title')) {
-    fotoArray[index].updateSelf(event.target.innerText, 'title');
-  } else {
-    fotoArray[index].updateSelf(event.target.innerText, 'caption');
-  }
-  fotoArray[index].saveToStorage(fotoArray);
-}
-
-
-function updateFotoCard(event) {
- if (event.target.classList.contains('text')) {
-  setEditable();
-  document.body.addEventListener('keypress', saveTextOnEnter);
-  event.target.addEventListener('blur', saveTextOnClick);
- }
-}
-
 
 function saveTextOnClick(event) {
   updateFoto();    
@@ -209,15 +219,57 @@ function saveTextOnEnter(event) {
   }
 }; 
 
-function setUneditable() {
-  event.target.contentEditable = false;
-};
-
 function setEditable() {
   event.target.contentEditable = true;
 }
 
+function setUneditable() {
+  event.target.contentEditable = false;
+};
 
+function showAll() {
+  if (showMoreBtn.innerText === 'Show More') {
+    removeCards();
+    fotoArray.forEach(function(foto){
+      createCards(foto);
+    });
+    showMoreBtn.innerText = 'Show Less';
+  } else if (showMoreBtn.innerText === 'Show Less') {
+    showTen();
+    showMoreBtn.innerText = 'Show More';  
+  }
+}
 
+function showTen(foto) {
+  if (fotoArray.length <= 5) {
+    createCards(foto);
+  } else {
+    enableButton(showMoreBtn);
+    var changeArray = fotoArray.slice(0);
+    changeArray.reverse();
+    var showArray = changeArray.slice(0, 5);
+    removeCards();
+    showArray.reverse();
+    showArray.forEach(function(foto) {
+      createCards(foto);
+    })
+  }
+}
 
+function updateFoto() {
+var index = findIndexNumber(event.target.parentElement.dataset.id);
+  if (event.target.classList.contains('title')) {
+    fotoArray[index].updateSelf(event.target.innerText, 'title');
+  } else {
+    fotoArray[index].updateSelf(event.target.innerText, 'caption');
+  }
+  fotoArray[index].saveToStorage(fotoArray);
+}
 
+function updateFotoCard(event) {
+ if (event.target.classList.contains('text')) {
+  setEditable();
+  document.body.addEventListener('keypress', saveTextOnEnter);
+  event.target.addEventListener('blur', saveTextOnClick);
+ }
+}

@@ -9,7 +9,10 @@
 <body>
   <header>
     <h1>FOTO<img class="logo-svg" alt="foto finder logo" src="images/foto-finder-logo.svg">FINDER</h1>
-    <input class ="search" type="text" name="search" placeholder="Search">
+    <div class="search-div">
+      <input class ="search-input" type="text" name="search" placeholder="Search">
+      <div class="search-icon-div"><img class="search-icon" src="images/search.svg"></div>
+    </div>
   </header>
   <section class="user-inputs">
     <form class="user-inputs-form">
@@ -28,6 +31,9 @@
   <section class="foto-card-section">
     <p class="no-photo-text">Looks like you don't have any photos yet! Add them above to start your album!</p>
   <!-- foto Cards go here -->
+  </section>
+  <section class="show-more-section">
+    <button disabled class="show-more-btn">Show More</button>
   </section>
   <script src="foto.js"></script>
   <script src="main.js"></script>

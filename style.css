@@ -21,16 +21,42 @@ h1 {
   margin: 20px;
 }
 
-.logo-svg {
-  height: 35px  ;
+label,
+input,
+textarea {
+  height: 20px;
+  padding: 10px;
 }
 
-.search {
-  margin: 20px;
+.logo-svg {
+  height: 35px;
+}
+
+.search-div {
+  display: flex;
+
+}
+
+.search-input {
+  margin: 20px 0px;
   height: 20px;
   border: 2px solid #c2b2b4;
-  border-radius: 5px;
+  border-radius: 5px 0px 0px 5px;
   font-size: 20px;
+}
+
+.search-icon-div {
+  height: 44px;
+  width: 44px;
+  background-color: #c2b2b4;
+  border-radius: 0px 5px 5px 0px;
+  margin: 20px 20px 20px 0px;
+}
+
+.search-icon {
+  padding: 4px;
+  height: 35px;
+  width: 35px;
 }
 
 .user-inputs {
@@ -47,12 +73,6 @@ h1 {
   padding-bottom: 20px;
 }
 
-label,
-input,
-textarea {
-  height: 20px;
-  padding: 10px;
-}
 
 #foto-upload-input{
   width: 0.1px;
@@ -68,14 +88,16 @@ textarea {
 }
 
 .add-filter-btns,
-#foto-upload-label{
+#foto-upload-label,
+.show-more-btn {
   background-color: #5B4447;
   border: 0;
   margin: 20px 0px 20px 0px;
   color: #FFF;
 }
 
-.add-filter-btns {
+.add-filter-btns,
+.show-more-btn{
   height: 35px;
   width: 45%;
 }
@@ -85,7 +107,8 @@ textarea {
   justify-content: space-between;
 }
 
-.add-btn:disabled {
+.add-btn:disabled,
+.show-more-btn:disabled {
   background-color: #c2b2b4;
 }
 
@@ -95,6 +118,11 @@ textarea {
   width: 100%;
   font-size: 30px;
   word-break: normal;
+}
+
+.show-more-section {
+  display: flex;
+  justify-content: center;
 }
 
 article {
