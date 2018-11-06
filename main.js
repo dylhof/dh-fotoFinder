@@ -19,12 +19,16 @@ addToAlbumBtn.addEventListener('click', createFotoString);
 favoritesBtn.addEventListener('click', event => {
     favoriteFilter(event)
   });
+
+
 fotoCardSection.addEventListener('click', event => {
+  if (event.target.classList.contains('favorite-btn')){
     favoriteVote(event);
-  });
-fotoCardSection.addEventListener('click', event =>{
-    deleteCard(event)
-  });
+  } else if (event.target.classList.contains('delete-btn')) {
+    deleteCard(event);
+  }
+})
+
 fotoCardSection.addEventListener('dblclick', updateFotoCard);
 userInputForm.addEventListener('input', function() {
   if (title.value !== '' && caption.value !== '' && fotoInput.value !== '')
@@ -100,10 +104,8 @@ function createNewFoto(event) {
 function deleteCard(event) {
   var index = findIndexNumber(event.target.parentElement.parentElement.dataset.id);
   var card = event.target.parentElement.parentElement;
-  if (event.target.classList.contains('delete-btn')) {
-    fotoArray[index].deleteFromStorage(fotoArray, index);
-    card.remove();
-  }
+  fotoArray[index].deleteFromStorage(fotoArray, index);
+  card.remove();
   favoriteCountUpdate();
   if (fotoArray.length === 0) {
     fotoCardSection.insertAdjacentHTML('afterbegin',
@@ -167,11 +169,11 @@ function favoriteUpdateCall(index){
 
 function favoriteVote(event) {
   var index = findIndexNumber(event.target.parentElement.parentElement.dataset.id);
-  if (event.target.classList.contains('favorite-btn') && event.target.classList.contains('favorite')) {
+  if (event.target.classList.contains('favorite')) {
     favoriteUpdateCall(index);
     event.target.classList.remove('favorite');
     favoriteCountUpdate();
-  } else if (event.target.classList.contains('favorite-btn')) {
+  } else {
     favoriteUpdateCall(index);
     event.target.classList.add('favorite');
     favoriteCountUpdate();
