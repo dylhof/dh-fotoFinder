@@ -44,6 +44,14 @@ function disableButton(button) {
     button.disabled = true;
 }
 
+function checkFotoArrayLength(foto) {
+  if (fotoArray.length <= 5) {
+    createCards(foto);
+  } else{
+    showTen(foto);
+  }
+}
+
 function clearInputs() {
   title.value = '';
   caption.value = '';
@@ -74,7 +82,7 @@ function createCardsOnReload() {
     parsedArray.forEach(function(foto){
       var foto = new Foto(foto.title, foto.caption, foto.file, foto.favorite, foto.id);
       fotoArray.push(foto);
-      showTen(foto);
+      checkFotoArrayLength(foto);
     }) 
     document.querySelector('.no-photo-text').remove();
   } 
@@ -93,9 +101,9 @@ function createNewFoto(event) {
   disableButton(addToAlbumBtn);
   var userFoto =  reader.result;
   var foto = new Foto(title.value, caption.value, userFoto);
-  fotoArray.unshift(foto);
+  fotoArray.push(foto);
   foto.saveToStorage(fotoArray);
-  showTen(foto);
+  checkFotoArrayLength(foto);
   if (fotoArray.length === 1) { 
     document.querySelector('.no-photo-text').remove();
   } 
@@ -145,7 +153,7 @@ function favoriteFilter(event) {
   if(document.querySelector('.fav-btn').innerText === 'View All') {
     removeCards();
     changeArray.forEach(function(foto) {
-      showTen(foto);
+      checkFotoArrayLength(foto)
     });
     document.querySelector('.fav-btn').innerHTML = 'View <span class="favorite-number">#</span> Favorites';
     favoriteCountUpdate();
@@ -244,11 +252,18 @@ function showAll() {
 }
 
 function showTen(foto) {
-  if (fotoArray.length <= 5) {
-    createCards(foto);
-  } else {
+  // if (fotoArray.length <= 5) {
+  //   createCards(foto);
+  // } else {
     enableButton(showMoreBtn);
-    var changeArray = fotoArray.slice(0);
+
+    // fotoArray.forEach(function(foto, i) {
+
+    // })
+
+
+    var changeArray = fotoArray.slice(0,);
+    console.log('from show 10 funct', changeArray);
     changeArray.reverse();
     var showArray = changeArray.slice(0, 5);
     removeCards();
@@ -256,7 +271,7 @@ function showTen(foto) {
     showArray.forEach(function(foto) {
       createCards(foto);
     })
-  }
+  
 }
 
 function updateFoto() {
