@@ -11,6 +11,10 @@ var userFoto = document.getElementById('foto-upload-input');
 var showMoreBtn = document.querySelector('.show-more-btn');
 var reader = new FileReader();
 
+function getStuff(field) {
+  return document.querySelector(field);
+}
+
 addToAlbumBtn.addEventListener('click', createFotoString);
 favoritesBtn.addEventListener('click', event => {
     favoriteFilter(event)
@@ -63,7 +67,6 @@ function createCardsOnReload() {
   if (localStorage.length !== 0) {
     var storedArray = localStorage.getItem("array");
     var parsedArray = JSON.parse(storedArray);
-    fotoArray = [];
     parsedArray.forEach(function(foto){
       var foto = new Foto(foto.title, foto.caption, foto.file, foto.favorite, foto.id);
       fotoArray.push(foto);
@@ -86,7 +89,7 @@ function createNewFoto(event) {
   disableButton(addToAlbumBtn);
   var userFoto =  reader.result;
   var foto = new Foto(title.value, caption.value, userFoto);
-  fotoArray.push(foto);
+  fotoArray.unshift(foto);
   foto.saveToStorage(fotoArray);
   showTen(foto);
   if (fotoArray.length === 1) { 
@@ -106,7 +109,7 @@ function deleteCard(event) {
     fotoCardSection.insertAdjacentHTML('afterbegin',
       '<p class="no-photo-text">Looks like you don\'t have any photos yet! Add them above to start your album!</p>');
   }
-  if (fotoArray.length <=10) {
+  if (fotoArray.length <=5) {
     disableButton(showMoreBtn);
   }
 }
@@ -134,13 +137,11 @@ function favoriteCountUpdate() {
   }
 }
   
-
 function favoriteFilter(event) {
   var changeArray = fotoArray.slice(0);
   event.preventDefault();
   if(document.querySelector('.fav-btn').innerText === 'View All') {
     removeCards();
-    // changeArray.reverse();
     changeArray.forEach(function(foto) {
       showTen(foto);
     });

@@ -4,11 +4,14 @@
   <title>fotoFinder</title>
   <link rel="stylesheet" type="text/css" href="reset.css">
   <link rel="stylesheet" type="text/css" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:600,800" rel="stylesheet">
 </head>
 <body>
   <header>
-    <h1>FOTO<img class="logo-svg" alt="foto finder logo" src="images/foto-finder-logo.svg">FINDER</h1>
+    <div class="logo-div">
+      <h1>FOTO<img class="logo-svg" alt="foto finder logo" src="images/foto-finder-logo.svg">FINDER</h1>
+    </div>
     <div class="search-div">
       <input class ="search-input" type="text" name="search" placeholder="Search">
       <div class="search-icon-div"><img class="search-icon" src="images/search.svg"></div>
@@ -16,9 +19,9 @@
   </header>
   <section class="user-inputs">
     <form class="user-inputs-form">
-      <label for="title">Title</label>
+      <label class="input-label" for="title">Title</label>
       <input class="title" type="text" name="title" placeholder="Enter your title">
-      <label for="caption">Caption</label>
+      <label class="input-label" for="caption">Caption</label>
       <textarea class="caption" type="text" name="caption" placeholder="Enter your caption"></textarea>
       <input id="foto-upload-input" type="file" name="fotoUpload" accept="image/*">
       <label id="foto-upload-label" for="foto-upload-input">Choose a File</label>
@@ -28,12 +31,12 @@
       </div>
     </form>
   </section>
+  <section class="show-more-section">
+    <button disabled class="show-more-btn">Show More</button>
+  </section>
   <section class="foto-card-section">
     <p class="no-photo-text">Looks like you don't have any photos yet! Add them above to start your album!</p>
   <!-- foto Cards go here -->
-  </section>
-  <section class="show-more-section">
-    <button disabled class="show-more-btn">Show More</button>
   </section>
   <script src="foto.js"></script>
   <script src="main.js"></script>
