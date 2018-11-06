@@ -178,6 +178,10 @@ p:focus {
   border: 2px solid #938284;
 }
 
+h2:focus {
+  height: 38px;
+}
+
 .foto{
   height: 140px;
   object-fit: cover;
