@@ -244,6 +244,11 @@ p::-webkit-scrollbar-thumb {
   background-color: #938284;
 }
 
+.no-photo-text {
+  width: 100%;
+  height: 300px;
+}
+
 
 @media only screen and (max-width: 1530px) {
 .foto-card-section {

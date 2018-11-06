@@ -59,7 +59,7 @@ function clearInputs() {
 }
 
 function createCards(foto) {
-  fotoCardSection.insertAdjacentHTML('afterbegin', 
+  fotoCardSection.insertAdjacentHTML('beforeend', 
     `<article class="foto-card" data-id=${foto.id}>
       <h2  class="text searchable title" contenteditable="false">${foto.title}</h2>
       <img class="foto" src="${foto.file}">
@@ -89,7 +89,8 @@ function createCardsOnReload() {
   favoriteCountUpdate();
 }
 
-function createFotoString() {
+function createFotoString(event) {
+  event.preventDefault();
   if (document.getElementById('foto-upload-input').files[0]) {
     reader.readAsDataURL(document.getElementById('foto-upload-input').files[0]);
     reader.onload = createNewFoto;
@@ -101,7 +102,7 @@ function createNewFoto(event) {
   disableButton(addToAlbumBtn);
   var userFoto =  reader.result;
   var foto = new Foto(title.value, caption.value, userFoto);
-  fotoArray.push(foto);
+  fotoArray.unshift(foto);
   foto.saveToStorage(fotoArray);
   checkFotoArrayLength(foto);
   if (fotoArray.length === 1) { 
@@ -252,25 +253,24 @@ function showAll() {
 }
 
 function showTen(foto) {
-  // if (fotoArray.length <= 5) {
-  //   createCards(foto);
-  // } else {
     enableButton(showMoreBtn);
-
-    // fotoArray.forEach(function(foto, i) {
-
-    // })
-
-
-    var changeArray = fotoArray.slice(0,);
-    console.log('from show 10 funct', changeArray);
-    changeArray.reverse();
-    var showArray = changeArray.slice(0, 5);
     removeCards();
-    showArray.reverse();
-    showArray.forEach(function(foto) {
-      createCards(foto);
+    fotoArray.forEach(function(foto, i) {
+      if (i <= 4) {
+        createCards(foto);
+      } 
     })
+
+
+    // var changeArray = fotoArray.slice(0,);
+    // console.log('from show 10 funct', changeArray);
+    // changeArray.reverse();
+    // var showArray = changeArray.slice(0, 5);
+    // removeCards();
+    // showArray.reverse();
+    // showArray.forEach(function(foto) {
+    //   createCards(foto);
+    // })
   
 }
 
