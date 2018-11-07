@@ -82,6 +82,7 @@ function createCardsOnReload() {
     }) 
   } 
   favoriteCountUpdate();
+  insertPrompt();
 }
 
 function createFotoString(event) {
@@ -111,10 +112,7 @@ function deleteCard(event) {
   fotoArray[index].deleteFromStorage(fotoArray, index);
   card.remove();
   favoriteCountUpdate();
-  if (fotoArray.length === 0) {
-    fotoCardSection.insertAdjacentHTML('afterbegin',
-      '<p class="no-photo-text">Looks like you don\'t have any photos yet! Add them above to start your album!</p>');
-  }
+  insertPrompt()
   if (fotoArray.length <=5) {
     disableButton(showMoreBtn);
     showMoreBtn.innerText = 'Show More';
@@ -185,6 +183,13 @@ function findIndexNumber(fotoId) {
     if (fotoArray[i].id === fotoId) {
       return i;
     };
+  }
+}
+
+function insertPrompt() {
+  if (fotoArray.length === 0) {
+    fotoCardSection.insertAdjacentHTML('beforebegin',
+      '<p class="no-photo-text">Looks like you don\'t have any photos yet! Add them above to start your album!</p>');
   }
 }
 
