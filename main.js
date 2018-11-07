@@ -112,7 +112,7 @@ function deleteCard(event) {
   fotoArray[index].deleteFromStorage(fotoArray, index);
   card.remove();
   favoriteCountUpdate();
-  insertPrompt()
+  insertPrompt();
   if (fotoArray.length <=5) {
     disableButton(showMoreBtn);
     showMoreBtn.innerText = 'Show More';
@@ -189,7 +189,7 @@ function findIndexNumber(fotoId) {
 function insertPrompt() {
   if (fotoArray.length === 0) {
     fotoCardSection.insertAdjacentHTML('beforebegin',
-      '<p class="no-photo-text">Looks like you don\'t have any photos yet! Add them above to start your album!</p>');
+      '<h3 class="no-photo-text">Looks like you don\'t have any photos yet! Add them above to start your album!</h3>');
   }
 }
 
