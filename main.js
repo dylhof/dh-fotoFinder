@@ -65,7 +65,6 @@ function createCards(foto, direction) {
       </footer>
     </article>`);
   if (foto.favorite === true) {
-    // debugger;
     document.getElementById(foto.id).classList.add('favorite');
   }
   clearInputs(); 
@@ -164,7 +163,7 @@ function favoriteFilterTrueChecker (foto) {
   }
 }
 
-function favoriteUpdateCall(index){
+function favoriteUpdateCall(index) {
   fotoArray[index].updateFavorite();
   fotoArray[index].saveToStorage(fotoArray);
   favoriteCountUpdate();
@@ -202,7 +201,7 @@ function liveSearch() {
 
 function removeCards() {
   var cards = document.querySelectorAll('.foto-card');
-  cards.forEach(function(card){
+  cards.forEach(function(card) {
     card.remove();
   });
 }
@@ -234,7 +233,7 @@ function setUneditable() {
 function showAll() {
   if (showMoreBtn.innerText === 'Show More') {
     removeCards();
-    fotoArray.forEach(function(foto){
+    fotoArray.forEach(function(foto) {
       createCards(foto, 'beforeend');
     });
     showMoreBtn.innerText = 'Show Less';
