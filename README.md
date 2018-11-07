@@ -23,10 +23,19 @@ Sublime Text Editor
 -Dylan Hofmann
 
 ## Static Comps:
-http://frontend.turing.io/assets/images/projects/foto-finder/fotofinder2-1.png
+[comp](http://frontend.turing.io/assets/images/projects/foto-finder/fotofinder2-1.png)
 Full page comp
 
-http://frontend.turing.io/assets/images/projects/foto-finder/fotofinder2-2.png
+[comp2] (http://frontend.turing.io/assets/images/projects/foto-finder/fotofinder2-2.png)
 mobile comp
 
 ## My Version:
+<img width="1429" alt="screen shot 2018-11-06 at 9 49 42 pm" src="https://user-images.githubusercontent.com/37079656/48111275-0f5d6a80-e20e-11e8-991e-ee7458143809.png">
+Full Page
+
+<img width="315" alt="screen shot 2018-11-06 at 9 52 22 pm" src="https://user-images.githubusercontent.com/37079656/48111341-4b90cb00-e20e-11e8-9fcc-fe7a2b6c86f0.png">
+Mobile view top
+
+<img width="316" alt="screen shot 2018-11-06 at 9 53 40 pm" src="https://user-images.githubusercontent.com/37079656/48111371-7418c500-e20e-11e8-9995-5e6579f09f14.png">
+2nd mobile view
+
