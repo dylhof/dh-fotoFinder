@@ -26,7 +26,7 @@ Sublime Text Editor
 ![comp](http://frontend.turing.io/assets/images/projects/foto-finder/fotofinder2-1.png)
 Full page comp
 
-![comp2] (http://frontend.turing.io/assets/images/projects/foto-finder/fotofinder2-2.png)
+![comp2](http://frontend.turing.io/assets/images/projects/foto-finder/fotofinder2-2.png)
 mobile comp
 
 ## My Version:
