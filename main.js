@@ -11,33 +11,40 @@ var userFoto = document.getElementById('foto-upload-input');
 var showMoreBtn = document.querySelector('.show-more-btn');
 var reader = new FileReader();
 
-function getStuff(field) {
-  return document.querySelector(field);
-}
-
 addToAlbumBtn.addEventListener('click', createFotoString);
+
 favoritesBtn.addEventListener('click', event => {
     favoriteFilter(event)
   });
+
 fotoCardSection.addEventListener('click', event => {
+  if (event.target.classList.contains('favorite-btn')){
     favoriteVote(event);
-  });
-fotoCardSection.addEventListener('click', event =>{
-    deleteCard(event)
-  });
+  } else if (event.target.classList.contains('delete-btn')) {
+    deleteCard(event);
+  }
+})
+
 fotoCardSection.addEventListener('dblclick', updateFotoCard);
+
 userInputForm.addEventListener('input', function() {
   if (title.value !== '' && caption.value !== '' && fotoInput.value !== '')
     enableButton(addToAlbumBtn);
   });
+
 window.addEventListener('load', createCardsOnReload);
+
 document.querySelector('.search-input').addEventListener('keyup', liveSearch);
+
 showMoreBtn.addEventListener('click', showAll)
 
-
-
-function disableButton(button) {
-    button.disabled = true;
+function checkFotoArrayLength(foto, direction) {
+  if (fotoArray.length <= 5) {
+    createCards(foto, direction);
+  } else {
+    enableButton(showMoreBtn);
+    showTen();
+  }
 }
 
 function clearInputs() {
@@ -46,38 +53,40 @@ function clearInputs() {
   userFoto.value = '';
 }
 
-function createCards(foto) {
-  fotoCardSection.insertAdjacentHTML('afterbegin', 
+function createCards(foto, direction) {
+  fotoCardSection.insertAdjacentHTML(direction, 
     `<article class="foto-card" data-id=${foto.id}>
       <h2  class="text searchable title" contenteditable="false">${foto.title}</h2>
       <img class="foto" src="${foto.file}">
       <p  class="text searchable caption" contenteditable="false">${foto.caption}</p>
       <footer>
         <button class="delete-btn"></button>
-        <button class="favorite-btn"></button>
+        <button id="${foto.id}" class="favorite-btn"></button>
       </footer>
     </article>`);
-  if (foto.favorite) {
-    document.querySelector('.favorite-btn').classList.add("favorite")
+  if (foto.favorite === true) {
+    // debugger;
+    document.getElementById(foto.id).classList.add('favorite');
   }
   clearInputs(); 
 } 
 
 function createCardsOnReload() {
   if (localStorage.length !== 0) {
+    document.querySelector('.no-photo-text').remove();
     var storedArray = localStorage.getItem("array");
     var parsedArray = JSON.parse(storedArray);
-    parsedArray.forEach(function(foto){
+    parsedArray.forEach(function(foto) {
       var foto = new Foto(foto.title, foto.caption, foto.file, foto.favorite, foto.id);
       fotoArray.push(foto);
-      showTen(foto);
+      checkFotoArrayLength(foto, 'beforeend');
     }) 
-    document.querySelector('.no-photo-text').remove();
   } 
   favoriteCountUpdate();
 }
 
-function createFotoString() {
+function createFotoString(event) {
+  event.preventDefault();
   if (document.getElementById('foto-upload-input').files[0]) {
     reader.readAsDataURL(document.getElementById('foto-upload-input').files[0]);
     reader.onload = createNewFoto;
@@ -91,7 +100,7 @@ function createNewFoto(event) {
   var foto = new Foto(title.value, caption.value, userFoto);
   fotoArray.unshift(foto);
   foto.saveToStorage(fotoArray);
-  showTen(foto);
+  checkFotoArrayLength(foto, 'afterbegin');
   if (fotoArray.length === 1) { 
     document.querySelector('.no-photo-text').remove();
   } 
@@ -100,10 +109,8 @@ function createNewFoto(event) {
 function deleteCard(event) {
   var index = findIndexNumber(event.target.parentElement.parentElement.dataset.id);
   var card = event.target.parentElement.parentElement;
-  if (event.target.classList.contains('delete-btn')) {
-    fotoArray[index].deleteFromStorage(fotoArray, index);
-    card.remove();
-  }
+  fotoArray[index].deleteFromStorage(fotoArray, index);
+  card.remove();
   favoriteCountUpdate();
   if (fotoArray.length === 0) {
     fotoCardSection.insertAdjacentHTML('afterbegin',
@@ -111,70 +118,66 @@ function deleteCard(event) {
   }
   if (fotoArray.length <=5) {
     disableButton(showMoreBtn);
+    showMoreBtn.innerText = 'Show More';
   }
+}
+
+function disableButton(button) {
+    button.disabled = true;
 }
 
 function enableButton(button) {
     button.disabled = false;
 }
 
-function favoriteArrayCreate() {
-  var favoriteArray = fotoArray.filter(function(foto) {
-    if(foto.favorite === true){
-      return foto;
-    };    
-  });
-  favoriteArray.reverse();
-  return favoriteArray;
-}
-
 function favoriteCountUpdate() {
-  var favoriteArray = favoriteArrayCreate();
-  if (favoriteArray.length === 0){
-    document.querySelector('.favorite-number').innerText = 0;
-  } else {
-    document.querySelector('.favorite-number').innerText = favoriteArray.length;
-  }
+  var favoriteCount = 0;
+  fotoArray.forEach(function(foto) {
+    if (foto.favorite === true) {
+      favoriteCount++
+    };
+  });
+  document.querySelector('.favorite-number').innerText = favoriteCount;
 }
   
 function favoriteFilter(event) {
-  var changeArray = fotoArray.slice(0);
   event.preventDefault();
-  if(document.querySelector('.fav-btn').innerText === 'View All') {
-    removeCards();
-    changeArray.forEach(function(foto) {
-      showTen(foto);
-    });
+  removeCards();
+  if (document.querySelector('.fav-btn').innerText === 'View All') {
+    fotoArray.forEach(function(foto) {
+      checkFotoArrayLength(foto, 'beforeend')
+    })
     document.querySelector('.fav-btn').innerHTML = 'View <span class="favorite-number">#</span> Favorites';
-    favoriteCountUpdate();
+    favoriteCountUpdate();  
   } else {
-    var favoriteArray = favoriteArrayCreate();
     removeCards();
-    favoriteArray.reverse();
-    favoriteArray.forEach(function(foto) {
-      createCards(foto);
-    });
-    favoriteArray.reverse();
+    fotoArray.forEach(function(foto) {
+      favoriteFilterTrueChecker(foto);
+    })
     document.querySelector('.fav-btn').innerText = 'View All';
-  };
+  }
+}
+
+function favoriteFilterTrueChecker (foto) {
+  if(foto.favorite === true) {
+      createCards(foto, 'beforeend');
+  }
 }
 
 function favoriteUpdateCall(index){
   fotoArray[index].updateFavorite();
-  fotoArray.splice(index, 1, fotoArray[index]);
   fotoArray[index].saveToStorage(fotoArray);
+  favoriteCountUpdate();
 }
 
 function favoriteVote(event) {
   var index = findIndexNumber(event.target.parentElement.parentElement.dataset.id);
-  if (event.target.classList.contains('favorite-btn') && event.target.classList.contains('favorite')) {
+  if (event.target.classList.contains('favorite')) {
     favoriteUpdateCall(index);
     event.target.classList.remove('favorite');
-    favoriteCountUpdate();
-  } else if (event.target.classList.contains('favorite-btn')) {
+  } else {
     favoriteUpdateCall(index);
     event.target.classList.add('favorite');
-    favoriteCountUpdate();
   };
 }
 
@@ -193,7 +196,7 @@ function liveSearch() {
   })
   removeCards();
   shownArray.forEach(function(foto) {
-    createCards(foto);
+    createCards(foto, 'beforeend');
   })
 }
 
@@ -232,29 +235,22 @@ function showAll() {
   if (showMoreBtn.innerText === 'Show More') {
     removeCards();
     fotoArray.forEach(function(foto){
-      createCards(foto);
+      createCards(foto, 'beforeend');
     });
     showMoreBtn.innerText = 'Show Less';
   } else if (showMoreBtn.innerText === 'Show Less') {
-    showTen();
     showMoreBtn.innerText = 'Show More';  
+    showTen();
   }
 }
 
-function showTen(foto) {
-  if (fotoArray.length <= 5) {
-    createCards(foto);
-  } else {
-    enableButton(showMoreBtn);
-    var changeArray = fotoArray.slice(0);
-    changeArray.reverse();
-    var showArray = changeArray.slice(0, 5);
+function showTen() {  
     removeCards();
-    showArray.reverse();
-    showArray.forEach(function(foto) {
-      createCards(foto);
+    fotoArray.forEach(function(foto, i) {
+      if(i<5) {
+        createCards(foto, 'beforeend');
+      }
     })
-  }
 }
 
 function updateFoto() {
