@@ -44,11 +44,12 @@ function disableButton(button) {
     button.disabled = true;
 }
 
-function checkFotoArrayLength(foto) {
+function checkFotoArrayLength(foto, direction) {
   if (fotoArray.length <= 5) {
-    createCards(foto);
-  } else{
-    showTen(foto);
+    createCards(foto, direction);
+  } else {
+    enableButton(showMoreBtn);
+    showTen();
   }
 }
 
@@ -58,33 +59,34 @@ function clearInputs() {
   userFoto.value = '';
 }
 
-function createCards(foto) {
-  fotoCardSection.insertAdjacentHTML('beforeend', 
+function createCards(foto, direction) {
+  fotoCardSection.insertAdjacentHTML(direction, 
     `<article class="foto-card" data-id=${foto.id}>
       <h2  class="text searchable title" contenteditable="false">${foto.title}</h2>
       <img class="foto" src="${foto.file}">
       <p  class="text searchable caption" contenteditable="false">${foto.caption}</p>
       <footer>
         <button class="delete-btn"></button>
-        <button class="favorite-btn"></button>
+        <button id="${foto.id}" class="favorite-btn"></button>
       </footer>
     </article>`);
-  if (foto.favorite) {
-    document.querySelector('.favorite-btn').classList.add("favorite")
+  if (foto.favorite === true) {
+    // debugger;
+    document.getElementById(foto.id).classList.add('favorite');
   }
   clearInputs(); 
 } 
 
 function createCardsOnReload() {
   if (localStorage.length !== 0) {
+    document.querySelector('.no-photo-text').remove();
     var storedArray = localStorage.getItem("array");
     var parsedArray = JSON.parse(storedArray);
-    parsedArray.forEach(function(foto){
+    parsedArray.forEach(function(foto) {
       var foto = new Foto(foto.title, foto.caption, foto.file, foto.favorite, foto.id);
       fotoArray.push(foto);
-      checkFotoArrayLength(foto);
+      checkFotoArrayLength(foto, 'beforeend');
     }) 
-    document.querySelector('.no-photo-text').remove();
   } 
   favoriteCountUpdate();
 }
@@ -104,7 +106,7 @@ function createNewFoto(event) {
   var foto = new Foto(title.value, caption.value, userFoto);
   fotoArray.unshift(foto);
   foto.saveToStorage(fotoArray);
-  checkFotoArrayLength(foto);
+  checkFotoArrayLength(foto, 'afterbegin');
   if (fotoArray.length === 1) { 
     document.querySelector('.no-photo-text').remove();
   } 
@@ -122,6 +124,7 @@ function deleteCard(event) {
   }
   if (fotoArray.length <=5) {
     disableButton(showMoreBtn);
+    showMoreBtn.innerText = 'Show More';
   }
 }
 
@@ -131,11 +134,8 @@ function enableButton(button) {
 
 function favoriteArrayCreate() {
   var favoriteArray = fotoArray.filter(function(foto) {
-    if(foto.favorite === true){
-      return foto;
-    };    
+    (foto.favorite === true)
   });
-  favoriteArray.reverse();
   return favoriteArray;
 }
 
@@ -171,6 +171,7 @@ function favoriteFilter(event) {
 }
 
 function favoriteUpdateCall(index){
+  console.log(fotoArray[index])
   fotoArray[index].updateFavorite();
   fotoArray.splice(index, 1, fotoArray[index]);
   fotoArray[index].saveToStorage(fotoArray);
@@ -204,7 +205,7 @@ function liveSearch() {
   })
   removeCards();
   shownArray.forEach(function(foto) {
-    createCards(foto);
+    createCards(foto, 'beforeend');
   })
 }
 
@@ -243,35 +244,22 @@ function showAll() {
   if (showMoreBtn.innerText === 'Show More') {
     removeCards();
     fotoArray.forEach(function(foto){
-      createCards(foto);
+      createCards(foto, 'beforeend');
     });
     showMoreBtn.innerText = 'Show Less';
   } else if (showMoreBtn.innerText === 'Show Less') {
-    showTen();
     showMoreBtn.innerText = 'Show More';  
+    showTen();
   }
 }
 
-function showTen(foto) {
-    enableButton(showMoreBtn);
+function showTen() {  
     removeCards();
     fotoArray.forEach(function(foto, i) {
-      if (i <= 4) {
-        createCards(foto);
-      } 
+      if(i<5) {
+        createCards(foto, 'beforeend');
+      }
     })
-
-
-    // var changeArray = fotoArray.slice(0,);
-    // console.log('from show 10 funct', changeArray);
-    // changeArray.reverse();
-    // var showArray = changeArray.slice(0, 5);
-    // removeCards();
-    // showArray.reverse();
-    // showArray.forEach(function(foto) {
-    //   createCards(foto);
-    // })
-  
 }
 
 function updateFoto() {
