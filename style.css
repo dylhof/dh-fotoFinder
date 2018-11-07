@@ -210,11 +210,7 @@ footer {
   background-image: url(images/delete-active.svg);
 }
 
-.favorite-btn:hover {
-  background-image: url(images/favorite-active.svg);
-}
-
-.favorite{
+.favorite {
   background-image: url(images/favorite-active.svg);
 }
 

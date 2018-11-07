@@ -11,15 +11,11 @@ var userFoto = document.getElementById('foto-upload-input');
 var showMoreBtn = document.querySelector('.show-more-btn');
 var reader = new FileReader();
 
-function getStuff(field) {
-  return document.querySelector(field);
-}
-
 addToAlbumBtn.addEventListener('click', createFotoString);
+
 favoritesBtn.addEventListener('click', event => {
     favoriteFilter(event)
   });
-
 
 fotoCardSection.addEventListener('click', event => {
   if (event.target.classList.contains('favorite-btn')){
@@ -30,19 +26,17 @@ fotoCardSection.addEventListener('click', event => {
 })
 
 fotoCardSection.addEventListener('dblclick', updateFotoCard);
+
 userInputForm.addEventListener('input', function() {
   if (title.value !== '' && caption.value !== '' && fotoInput.value !== '')
     enableButton(addToAlbumBtn);
   });
+
 window.addEventListener('load', createCardsOnReload);
+
 document.querySelector('.search-input').addEventListener('keyup', liveSearch);
+
 showMoreBtn.addEventListener('click', showAll)
-
-
-
-function disableButton(button) {
-    button.disabled = true;
-}
 
 function checkFotoArrayLength(foto, direction) {
   if (fotoArray.length <= 5) {
@@ -128,53 +122,52 @@ function deleteCard(event) {
   }
 }
 
+function disableButton(button) {
+    button.disabled = true;
+}
+
 function enableButton(button) {
     button.disabled = false;
 }
 
-function favoriteArrayCreate() {
-  var favoriteArray = fotoArray.filter(function(foto) {
-    (foto.favorite === true)
-  });
-  return favoriteArray;
-}
-
 function favoriteCountUpdate() {
-  var favoriteArray = favoriteArrayCreate();
-  if (favoriteArray.length === 0){
-    document.querySelector('.favorite-number').innerText = 0;
-  } else {
-    document.querySelector('.favorite-number').innerText = favoriteArray.length;
-  }
+  var favoriteCount = 0;
+  fotoArray.forEach(function(foto) {
+    if (foto.favorite === true) {
+      favoriteCount++
+    };
+  });
+  document.querySelector('.favorite-number').innerText = favoriteCount;
 }
   
 function favoriteFilter(event) {
-  var changeArray = fotoArray.slice(0);
   event.preventDefault();
-  if(document.querySelector('.fav-btn').innerText === 'View All') {
-    removeCards();
-    changeArray.forEach(function(foto) {
-      checkFotoArrayLength(foto)
-    });
+  removeCards();
+  if (document.querySelector('.fav-btn').innerText === 'View All') {
+    fotoArray.forEach(function(foto) {
+      checkFotoArrayLength(foto, 'beforeend')
+    })
     document.querySelector('.fav-btn').innerHTML = 'View <span class="favorite-number">#</span> Favorites';
-    favoriteCountUpdate();
+    favoriteCountUpdate();  
   } else {
-    var favoriteArray = favoriteArrayCreate();
     removeCards();
-    favoriteArray.reverse();
-    favoriteArray.forEach(function(foto) {
-      createCards(foto);
-    });
-    favoriteArray.reverse();
+    fotoArray.forEach(function(foto) {
+      favoriteFilterTrueChecker(foto);
+    })
     document.querySelector('.fav-btn').innerText = 'View All';
-  };
+  }
+}
+
+function favoriteFilterTrueChecker (foto) {
+  if(foto.favorite === true) {
+      createCards(foto, 'beforeend');
+  }
 }
 
 function favoriteUpdateCall(index){
-  console.log(fotoArray[index])
   fotoArray[index].updateFavorite();
-  fotoArray.splice(index, 1, fotoArray[index]);
   fotoArray[index].saveToStorage(fotoArray);
+  favoriteCountUpdate();
 }
 
 function favoriteVote(event) {
@@ -182,11 +175,9 @@ function favoriteVote(event) {
   if (event.target.classList.contains('favorite')) {
     favoriteUpdateCall(index);
     event.target.classList.remove('favorite');
-    favoriteCountUpdate();
   } else {
     favoriteUpdateCall(index);
     event.target.classList.add('favorite');
-    favoriteCountUpdate();
   };
 }
 
